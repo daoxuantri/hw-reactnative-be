@@ -6,16 +6,16 @@ const auth = require("../middlewares/auth");
 
 exports.register = async (req, res, next) => {
     try {
-        const {username, password} = req.body;
+        const {email, password, contact, address} = req.body;
 
         const salt = bcryptjs.genSaltSync(10);
 
         req.body.password = bcryptjs.hashSync(password, salt);
 
         
-        const usernames = await User.findOne({ username });
+        const emails = await User.findOne({ email });
 
-        if (usernames) {
+        if (emails) {
             return res.status(201).send({
                 success: false,
                 message: "Email đã tồn tại vui lòng đăng kí mới"
@@ -23,8 +23,10 @@ exports.register = async (req, res, next) => {
         };
 
         const newUser = new User({
-            username: username,
-            password: req.body.password
+            email: email,
+            password: req.body.password,
+            contact: contact,
+            address:address
         });
         const saveUser = await newUser.save();
         if (!saveUser) {
@@ -42,9 +44,9 @@ exports.register = async (req, res, next) => {
 
 exports.login = async (req, res, next) => {
     try {
-        const {username, password} = req.body;
+        const {email, password} = req.body;
         
-        const resultUser = await User.findOne({username});
+        const resultUser = await User.findOne({email});
         if (!resultUser) {
             return res.status(201).send({
                 success: false,
@@ -60,8 +62,14 @@ exports.login = async (req, res, next) => {
         });
 
         if (isCorrectPassword && resultUser){
+            const access_token = auth.generateAccessToken(resultUser._id); 
+            // const { password, createdAt, updatedAt, _v , role , ...others} = resultUser._doc;
             return res.status(200).json({ 
                 success: true, 
+                data: {
+                    ...resultUser.toJSON(),
+                    access_token: access_token,
+                },
 
             });
             
@@ -76,7 +84,7 @@ exports.login = async (req, res, next) => {
 
 exports.resetpass = async (req, res, next) => {
     try {
-        const {username, password} = req.body;
+        const {email, password} = req.body;
 
 
         //hashSync
@@ -84,7 +92,7 @@ exports.resetpass = async (req, res, next) => {
         req.body.password = bcryptjs.hashSync(password, salt);
 
         const saveUser = await User.findOneAndUpdate(
-            {username: username},
+            {email: email},
             {password: req.body.password},
             { new: true }
         )
