@@ -10,6 +10,7 @@ const { verifyHashedData } = require("../util/hashData");
 router.post("/register", userController.register);
 router.post("/login", userController.login);
 router.post("/forget-password", userController.resetpass);
+router.post("/update-info", userController.updateinfo);
 
 router.post("/verify", async (req,res) =>{
     try{

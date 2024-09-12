@@ -29,6 +29,7 @@ mongoose.connect(dbConfig.db).then(
 )
 app.use(express.json());
 app.use("/users", require("./routes/users.routes"));
+app.use("/products", require("./routes/products.routes"));
 // app.use(
 //     (req,res,next) =>{
 //         auth

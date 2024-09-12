@@ -107,4 +107,28 @@ exports.resetpass = async (req, res, next) => {
     }
 };
 
+exports.updateinfo = async (req, res, next) => {
+
+    try{
+        const {_id , email , contact , address} = req.body; 
+        const updatedUser = await User.findByIdAndUpdate(
+                req.body._id,
+                {
+                    contact: req.body.contact,
+                    address: req.body.address,
+                },
+                { new: true }
+            )
+            return res.status(200).json({
+                success: true,
+                message: "Thành công"});
+
+    }catch(err){
+        return next(err); 
+    }
+    
+};
+
+
+
 
