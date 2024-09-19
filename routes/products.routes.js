@@ -8,4 +8,5 @@ const router = express.Router();
 
 router.get("/listallproduct", productController.listallproduct);
 router.post("/createproduct", productController.createProduct);
+router.get("/getselling", productController.getselling);
 module.exports = router;    

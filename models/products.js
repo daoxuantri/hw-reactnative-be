@@ -17,6 +17,10 @@ const productSchema = new Schema ({
         type: Number,
         trim: true,
     },
+    selling : {
+        type : Number, 
+        trim : true,
+    }
 },{ timestamps: true }
 );
 

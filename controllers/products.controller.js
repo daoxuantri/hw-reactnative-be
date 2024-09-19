@@ -46,3 +46,22 @@ exports.createProduct = async (req,res,next)=>{
 
 
 
+ exports.getselling = async (req, res, next) => {
+    try {
+        const topSellingProducts = await Product.find() 
+          .sort({ selling: -1 })
+          .limit(10) 
+          .exec(); 
+    
+        return res.status(200).send({
+            success: true , 
+            data: topSellingProducts
+        });;
+      } catch (err) {
+        next(err); 
+      }
+    };
+    
+    
+
+

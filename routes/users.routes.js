@@ -6,11 +6,12 @@ const User = require("../models/users");
 const OTP = require("../otp/model");
 const {sendOTP, verifyOTP, sendVerificationOTPEmail, deleteOTP} = require("../otp/controller");
 const { verifyHashedData } = require("../util/hashData");
+const auth = require("../middlewares/auth");
 
 router.post("/register", userController.register);
 router.post("/login", userController.login);
 router.post("/forget-password", userController.resetpass);
-router.post("/update-info", userController.updateinfo);
+router.post("/update-info",auth.authenticateToken, userController.updateinfo);
 
 router.post("/verify", async (req,res) =>{
     try{
