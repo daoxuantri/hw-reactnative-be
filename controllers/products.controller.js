@@ -22,11 +22,13 @@ exports.listallproduct = async (req, res, next) => {
 
 exports.createProduct = async (req,res,next)=>{
     try{
-        const {nameproduct, imgs, price} = req.body;
+        const {name, images, description, price , sold} = req.body;
         const newProduct = new Product({
-            nameproduct: nameproduct,
-            imgs : imgs ,
-            price: price
+            name: name,
+            images: images,
+            description: description,
+            price: price ,
+            sold: sold
         })
 
         const save = await newProduct.save();
