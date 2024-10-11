@@ -32,6 +32,7 @@ app.use("/users", require("./routes/users.routes"));
 app.use("/products", require("./routes/products.routes"));
 app.use("/carts", require("./routes/carts.routes"));
 app.use("/orders", require("./routes/orders.routes"));
+app.use("/reviews", require("./routes/reviews.routes"));
 // app.use(
 //     (req,res,next) =>{
 //         auth
