@@ -59,7 +59,7 @@ exports.getorder = async (req, res, next) => {
     const { user } = req.body;
 
     try {
-        const listOrder = await Order.findOne({user : user }).select('-__v -createdAt -updatedAt');
+        const listOrder = await Order.find({user : user }).select('-__v -updatedAt');
 
         return res.status(201).json({
             success: true,
