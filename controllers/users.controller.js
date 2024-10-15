@@ -1,6 +1,7 @@
 const bcryptjs =require("bcryptjs");
 const User = require("../models/users");
-
+const Cart = require("../models/carts"); 
+const Coupon = require("../models/coupons"); 
 const auth = require("../middlewares/auth");
 
 
@@ -34,7 +35,22 @@ exports.register = async (req, res, next) => {
                 success: false,
                 message: "Đăng Ký User Mới Không Thành Công!"
             });
-        }
+        } 
+        
+        //create cart
+        const findUser = await User.findOne({email: email});
+
+        console.log('User trong contrller', findUser);
+        const newCart = new Cart({user : findUser._id});
+
+        const createCart = await newCart.save();
+
+        //create coupon 
+
+        const newCoupon = new Coupon({user: findUser._id});
+        const createCoupon = await newCoupon.save();
+
+        
         return res.status(200).send({success: true , message :"Thanh cong"});
     } catch (err) {
         next(err);

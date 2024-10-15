@@ -35,6 +35,10 @@ const orderSchema = new Schema({
     delivery:{
         type: Boolean,
         default: false
+    },
+    setCoupon:{
+        type: Number,
+        default: 1
     }
 },
     { timestamps: true }
