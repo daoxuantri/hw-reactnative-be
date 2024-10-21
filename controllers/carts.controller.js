@@ -43,6 +43,7 @@ exports.getcartbyuser = async (req, res, next) => {
 };
 
 
+
 //lay tat ca san pham gio hang cho users
 exports.addproduct = async (req, res, next) => {
     const { user, product, quantity } = req.body;
@@ -82,7 +83,6 @@ exports.addproduct = async (req, res, next) => {
             // Nếu sản phẩm đã có, cập nhật số lượng
             findCart.productItem[existingItemIndex].quantity += quantity;
         }
-
         // B5: Tính lại tổng tiền
         findCart.total = findCart.productItem.reduce((acc, cur) => acc + cur.price * cur.quantity, 0);
 
@@ -111,6 +111,7 @@ exports.removeproduct = async (req, res, next) => {
     // })
     // if (!isItemExist) return res.status(404).json({ success: false, message: "Không tìm thấy sản phẩm trong giỏ hàng của user" });
     //B2: 
+    
         const result = await Cart.findOneAndUpdate(
             { user: user },
             {

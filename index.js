@@ -6,12 +6,7 @@ const admin = require("firebase-admin");
 const cors = require("cors");
 const app = express();
 dotenv.config();
-
-const serviceAccount = require("./serviceAccountKey.json");
-
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+ 
 
 app.use(
     cors({
@@ -34,7 +29,7 @@ app.use("/products", require("./routes/products.routes"));
 app.use("/carts", require("./routes/carts.routes"));
 app.use("/orders", require("./routes/orders.routes"));
 app.use("/reviews", require("./routes/reviews.routes"));
-app.use("/notifications", require("./routes/notification.routes"));
+// app.use("/notifications", require("./routes/notification.routes"));
 app.use("/coupons", require("./routes/coupons.routes"));
 // Global error handler
 app.use((err, req, res, next) => {

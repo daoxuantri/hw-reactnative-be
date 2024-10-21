@@ -39,8 +39,7 @@ exports.register = async (req, res, next) => {
         
         //create cart
         const findUser = await User.findOne({email: email});
-
-        console.log('User trong contrller', findUser);
+ 
         const newCart = new Cart({user : findUser._id});
 
         const createCart = await newCart.save();

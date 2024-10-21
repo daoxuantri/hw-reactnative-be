@@ -1,5 +1,6 @@
 const Coupon = require("../models/coupons"); 
 const Order = require("../models/orders");
+const Product = require("../models/products")
 
 
 
@@ -48,11 +49,24 @@ exports.tichdiem = async (req, res, next) => {
                 { new: true }
             );
 
+            //set trang thai don hang da tich diem
             await Order.findOneAndUpdate(
-                { user: user },
+                { _id: order },
                 { setCoupon: 0},
                 { new: true }
             );
+
+            console.log
+
+            for (const item of updatedOrder.productItem) {
+                await Product.findByIdAndUpdate(
+                    item.product,
+                    { $inc: { sold: item.quantity } }, 
+                    { new: true }
+                );
+            }
+
+            
 
 
         }else{
