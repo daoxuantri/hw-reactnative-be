@@ -4,7 +4,7 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/users");
 const OTP = require("../otp/model");
-const {sendOTP, verifyOTP, sendVerificationOTPEmail, deleteOTP} = require("../otp/controller");
+const {sendOTP, verifyOTP, sendVerificationOTPEmail, deleteOTP, sendVerificationOTPEmaill} = require("../otp/controller");
 const { verifyHashedData } = require("../util/hashData");
 const auth = require("../middlewares/auth");
 
@@ -12,6 +12,42 @@ router.post("/register", userController.register);
 router.post("/login", userController.login);
 router.post("/forget-password", userController.resetpass);
 router.post("/update-info",auth.authenticateToken, userController.updateinfo);
+
+//flutter
+router.post("/email_verification1/:email", async (req, res) => {
+    try {
+        const { email } = req.params;
+        
+        const checkEmail = await User.findOne({email});
+        if(!checkEmail){
+            return res.status(401).send(
+                {success: false,
+                message: 'Tài khoản không tồn tại'}
+            );
+        }
+
+        if (!email) throw Error("An email is required!");
+
+        const createdEmailVerificationOTP = await sendVerificationOTPEmaill(email);
+
+        return res.status(200).json(createdEmailVerificationOTP);
+    } catch(e) {
+        res.status(400).send(e.message);
+    }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 router.post("/verify", async (req,res) =>{
     try{
@@ -43,6 +79,7 @@ router.post("/forgotpass", async (req, res)=>{
         res.status(400).send(e.message);
     }
 });
+
 
 router.post("/email_verification/:email", async (req, res) => {
     try {
