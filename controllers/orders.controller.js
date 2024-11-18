@@ -70,3 +70,43 @@ exports.getorder = async (req, res, next) => {
         next(error);
     }
 };
+
+
+exports.getallorder = async (req, res, next) => {
+    try {
+        // Lấy tất cả đơn hàng và populate thông tin sản phẩm và người dùng
+        const listOrder = await Order.find()
+            .populate('user', 'email _id') // populate chỉ lấy email từ user
+            .populate('productItem.product', 'name price images') // populate thông tin sản phẩm (name, price, images)
+            .select('-__v -updatedAt -createdAt'); // Loại bỏ các trường không cần thiết như __v, updatedAt, createdAt
+
+        // Loại bỏ trường 'id' trong phần thông tin user và điều chỉnh dữ liệu trả về
+        const formattedOrders = listOrder.map(order => {
+            return {
+                _id: order._id,
+                email: order.user.email, // Chỉ lấy email từ user
+                iduser: order.user.id,
+                productItem: order.productItem.map(item => ({
+                    productId: item.product._id, // Đổi tên trường 'product' thành 'productId'
+                    name: item.name,
+                    quantity: item.quantity,
+                    images: item.images,
+                    price: item.price
+                })),
+                total: order.total,
+                address: order.address,
+                phone: order.phone,
+                delivery: order.delivery,
+                setCoupon: order.setCoupon
+            };
+        });
+
+        return res.status(200).json({
+            success: true,
+            message: "Thành công",
+            data: formattedOrders
+        });
+    } catch (error) {
+        next(error);
+    }
+};
