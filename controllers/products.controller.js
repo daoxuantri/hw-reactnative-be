@@ -89,8 +89,8 @@ exports.getallflutter = async (req, res, next) => {
 
 exports.getproductbyid = async (req, res, next) => {
     try {
-        const _id = req.query.productId;
-        const foundId = await Product.find({_id : _id}).select('-__v -createdAt -updatedAt');
+        const _id = req.params.productId;
+        const foundId = await Product.findOne({_id : _id}).select('-__v -createdAt -updatedAt');
         if(!foundId){
             return res.status(404).send({
                 success: false,

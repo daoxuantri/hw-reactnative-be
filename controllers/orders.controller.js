@@ -110,3 +110,38 @@ exports.getallorder = async (req, res, next) => {
         next(error);
     }
 };
+
+
+exports.setStatusDelivery = async (req, res, next) => {
+    try {
+        const { orderId, delivery } = req.body;  
+
+        if (!orderId || typeof delivery !== "boolean") {
+            return res.status(400).json({
+                success: false,
+                message: "Thiếu thông tin orderId hoặc delivery",
+            });
+        }
+
+        // Tìm và cập nhật đơn hàng
+        const order = await Order.findByIdAndUpdate(
+            orderId,
+            { delivery: delivery },
+            { new: true } 
+        );
+
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: "Không tìm thấy đơn hàng",
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Cập nhật trạng thái thành công",
+        });
+    } catch (error) {
+        next(error);
+    }
+};
